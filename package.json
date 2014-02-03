@@ -2,6 +2,12 @@
   "name": "connect-devicedetect",
   "version": "0.0.0",
   "description": "Connect middleware to bucket user-agent strings into device groups",
+  "keywords": [
+    "connect",
+    "middleware",
+    "user-agent",
+    "x-ua-device"
+  ],
   "author": "Good Eggs Engineering <eng@goodeggs.com>",
   "contributors": [
     "Adam Hull <adam@hmlad.com>"
@@ -14,10 +20,13 @@
   "homepage": "https://github.com/goodeggs/connect-devicedetect",
   "bugs": "https://github.com/goodeggs/connect-devicedetect/issues",
   "dependencies": {
+    "connect-mobile-detection": "0.0.5"
   },
   "devDependencies": {
     "coffee-script": ">=1.7.x",
-    "mocha": "~1.x.x"
+    "mocha": "~1.x.x",
+    "supertest": "~0.9.0",
+    "connect": "~2.12.0"
   },
   "scripts": {
     "test": "mocha"
