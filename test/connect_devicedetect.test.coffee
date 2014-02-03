@@ -12,6 +12,9 @@ describe 'connect-devicedetect', ->
 
   beforeEach ->
     app = connect()
+      .use (request, res, next) ->
+        res.setHeader 'Vary', 'Accept-Encoding'
+        next()
       .use deviceDetect()
       .use (request, res, next) ->
         req = request
@@ -25,6 +28,11 @@ describe 'connect-devicedetect', ->
       assert req.headers['x-ua-device']
       assert res.headers['x-ua-device']
       done()
+
+  it 'adds Vary: user-agent for downstream caches', (done) ->
+    request.get('/')
+      .expect('Vary', 'Accept-Encoding, User-Agent')
+      .end(done)
 
   it 'buckets iPhone user-agent as phone', (done) ->
     request.get('/')
