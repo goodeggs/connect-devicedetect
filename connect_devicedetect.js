@@ -1,6 +1,5 @@
 var checkMobile = require('connect-mobile-detection')();
 
-
 function updateVary (res) {
   var vary = res.getHeader('vary') || '',
       varyHeaders = vary.split(', ');
@@ -31,5 +30,5 @@ module.exports = function () {
         return next();
       });
     }
-  }
+  };
 };
