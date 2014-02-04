@@ -42,15 +42,14 @@ describe 'connect-devicedetect', ->
       app = connect()
         .use deviceDetect()
         .use (req, res, next) ->
+          assert res.getHeader 'x-ua-device'
           assert req.headers['x-ua-device']
           next()
         .use(send)
 
       request(app).get('/')
-        .expect(200)
-        .end (err, res) ->
-          assert res.headers['x-ua-device']
-          done()
+        .expect('X-UA-Device', 'desktop')
+        .expect(200, done)
 
     it 'adds Vary: User-Agent for downstream caches only', (done) ->
       app = connect()

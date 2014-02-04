@@ -32,7 +32,6 @@ module.exports = function () {
         }
         req.headers['x-ua-device'] = device;
         res.setHeader('X-UA-Device', device);
-
         updateVary(res);
 
         return next();
