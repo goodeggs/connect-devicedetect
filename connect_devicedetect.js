@@ -1,10 +1,13 @@
 var checkMobile = require('connect-mobile-detection')();
 
 
-function varyOnUserAgent (res) {
+function updateVary (res) {
   var vary = res.getHeader('vary') || '',
       varyHeaders = vary.split(', ');
 
+  varyHeaders = varyHeaders.filter(function (header) {
+    return header.toLowerCase() != 'x-ua-device';
+  });
   varyHeaders.push('User-Agent');
   res.setHeader('vary', varyHeaders.join(', '));
 }
@@ -24,7 +27,7 @@ module.exports = function () {
         req.headers['x-ua-device'] = device;
         res.setHeader('X-UA-Device', device);
 
-        varyOnUserAgent(res);
+        updateVary(res);
         return next();
       });
     }
