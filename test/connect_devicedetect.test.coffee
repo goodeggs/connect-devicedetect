@@ -12,7 +12,7 @@ send = (req, res) ->
 
 vary = (headers) ->
   (req, res, next) ->
-    res.setHeader 'Vary', headers
+    res.setHeader 'Vary', [headers, res.getHeader('Vary')].filter(Boolean).join(', ')
     next()
 
 describe 'connect-devicedetect', ->
@@ -39,38 +39,41 @@ describe 'connect-devicedetect', ->
 
   describe 'headers', ->
     it 'sets X-UA-Device request and response headers', (done) ->
-      req = null
       app = connect()
         .use deviceDetect()
-        .use (request, res, next) ->
-          req = request
+        .use (req, res, next) ->
+          assert req.headers['x-ua-device']
           next()
         .use(send)
 
-      request(app).get('/').end (err, res) ->
-        assert req.headers['x-ua-device']
-        assert res.headers['x-ua-device']
-        done()
+      request(app).get('/')
+        .expect(200)
+        .end (err, res) ->
+          assert res.headers['x-ua-device']
+          done()
 
-    it 'adds Vary: User-Agent for downstream caches', (done) ->
+    it 'adds Vary: User-Agent for downstream caches only', (done) ->
       app = connect()
         .use(vary 'Accept-Encoding')
         .use(deviceDetect())
+        .use (req, res, next) ->
+          assert !/User-Agent/.test res.getHeader('Vary')
+          next()
         .use(send)
 
       request(app).get('/')
         .expect('Vary', 'Accept-Encoding, User-Agent')
-        .end(done)
+        .expect(200, done)
 
     describe 'when Vary: X-UA-Device is added upstream', ->
       {app} = {}
       beforeEach ->
         app = connect()
-          .use(vary 'X-UA-Device, Accept-Encoding')
           .use(deviceDetect())
+          .use(vary 'X-UA-Device, Accept-Encoding')
           .use(send)
 
-      it 'strips Vary: X-UA-Device', (done) ->
+      it 'strips Vary: X-UA-Device for downstream caches only', (done) ->
         request(app).get('/')
           .expect('Vary', 'Accept-Encoding, User-Agent')
           .end(done)

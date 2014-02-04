@@ -1,14 +1,21 @@
 var checkMobile = require('connect-mobile-detection')();
 
 function updateVary (res) {
-  var vary = res.getHeader('vary') || '',
-      varyHeaders = vary.split(', ');
-
-  varyHeaders = varyHeaders.filter(function (header) {
-    return header.toLowerCase() != 'x-ua-device';
-  });
-  varyHeaders.push('User-Agent');
-  res.setHeader('vary', varyHeaders.join(', '));
+  var origWriteHead = res.writeHead;
+  // wait until writeHead to modify headers so changes only affect downstream
+  res.writeHead = function () {
+    var vary = this.getHeader('vary') || '';
+    res.setHeader('vary', vary
+      .split(', ')
+      .filter(Boolean)
+      .filter(function (header) {
+       return header.toLowerCase() != 'x-ua-device';
+      })
+      .concat('User-Agent')
+      .join(', ')
+    );
+    origWriteHead.apply(this, arguments);
+  };
 }
 
 module.exports = function () {
@@ -27,6 +34,7 @@ module.exports = function () {
         res.setHeader('X-UA-Device', device);
 
         updateVary(res);
+
         return next();
       });
     }
