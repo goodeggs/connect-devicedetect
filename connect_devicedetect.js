@@ -18,7 +18,10 @@ function updateVary (res) {
   };
 }
 
-module.exports = function () {
+module.exports = function (options) {
+  options = options || {};
+  options.allMobileAsPhone = options.allMobileAsPhone || false;
+
   return function(req, res, next) {
     if (req.headers['x-ua-device']) {
       return next();
@@ -26,6 +29,9 @@ module.exports = function () {
       checkMobile(req, res, function() {
         var device;
         if (req.phone) {
+          device = 'phone';
+        // optionally also treat tablets as phones.
+        } else if (req.mobile && options.allMobileAsPhone) {
           device = 'phone';
         } else {
           device = 'desktop';
