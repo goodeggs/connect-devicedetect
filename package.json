@@ -1,6 +1,6 @@
 {
   "name": "connect-devicedetect",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Connect middleware to bucket user-agent strings into device groups",
   "keywords": [
     "connect",
