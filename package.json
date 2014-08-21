@@ -1,6 +1,6 @@
 {
   "name": "connect-devicedetect",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "description": "Connect middleware to bucket user-agent strings into device groups",
   "keywords": [
     "connect",
@@ -8,9 +8,10 @@
     "user-agent",
     "x-ua-device"
   ],
-  "author": "Good Eggs Engineering <eng@goodeggs.com>",
+  "author": "Good Eggs <open-source@goodeggs.com>",
   "contributors": [
-    "Adam Hull <adam@hmlad.com>"
+    "Adam Hull <adam@hmlad.com>",
+    "Bob Zoller <bob@zoller.us>"
   ],
   "main": "connect_devicedetect",
   "repository": {
