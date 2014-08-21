@@ -32,10 +32,10 @@ describe 'connect-devicedetect', ->
         .expect('X-UA-Device', 'phone')
         .end(done)
 
-    it 'buckets iPad user-agent as desktop by default', (done) ->
+    it 'buckets iPad user-agent as tablet', (done) ->
       request(app).get('/')
         .set('User-Agent', userAgents.iPad)
-        .expect('X-UA-Device', 'desktop')
+        .expect('X-UA-Device', 'tablet')
         .end(done)
 
     it 'buckets buckets non-phone user-agents as desktop', (done) ->

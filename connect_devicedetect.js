@@ -28,11 +28,12 @@ module.exports = function (options) {
     } else {
       checkMobile(req, res, function() {
         var device;
-        if (req.phone) {
+        if (req.mobile && options.allMobileAsPhone) {
           device = 'phone';
-        // optionally also treat tablets as phones.
-        } else if (req.mobile && options.allMobileAsPhone) {
+        } else if (req.phone) {
           device = 'phone';
+        } else if (req.tablet) {
+          device = 'tablet';
         } else {
           device = 'desktop';
         }
