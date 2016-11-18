@@ -18,9 +18,7 @@ function updateVary (res) {
   };
 }
 
-module.exports = function (options) {
-  options = options || {};
-  options.allMobileAsPhone = options.allMobileAsPhone || false;
+module.exports = function () {
 
   return function(req, res, next) {
     if (req.headers['x-ua-device']) {
@@ -28,9 +26,7 @@ module.exports = function (options) {
     } else {
       checkMobile(req, res, function() {
         var device;
-        if (req.mobile && options.allMobileAsPhone) {
-          device = 'phone';
-        } else if (req.phone) {
+        if (req.phone) {
           device = 'phone';
         } else if (req.tablet) {
           device = 'tablet';

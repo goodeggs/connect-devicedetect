@@ -45,21 +45,6 @@ describe 'connect-devicedetect', ->
         .end(done)
 
 
-  describe 'options', ->
-    {app} = {}
-
-    beforeEach ->
-      app = connect()
-        .use(deviceDetect({allMobileAsPhone: true}))
-        .use(send)
-
-    it 'can bucket tablets as phone', (done) ->
-      request(app).get('/')
-        .set('User-Agent', userAgents.iPad)
-        .expect('X-UA-Device', 'phone')
-        .end(done)
-
-
   describe 'headers', ->
     it 'sets X-UA-Device request and response headers', (done) ->
       app = connect()
