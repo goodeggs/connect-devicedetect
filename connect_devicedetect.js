@@ -26,15 +26,37 @@ module.exports = function () {
     } else {
       checkMobile(req, res, function() {
         var device;
+        var detailedDevice;
+        var isIOS = /iPad|iPhone|iPod/.test(req.headers['user-agent'])
+        var isAndroid = /Android.+Chrome\/[.0-9]*/.test(req.headers['user-agent'])
         if (req.phone) {
           device = 'phone';
+          if (isIOS) {
+            detailedDevice = 'mobile-iphone';
+          }
+          else if (isAndroid) {
+            detailedDevice = 'mobile-android';
+          }
         } else if (req.tablet) {
           device = 'tablet';
+          if (isIOS) {
+            detailedDevice = 'tablet-ipad';
+          }
+          else if (isAndroid) {
+            detailedDevice = 'tablet-android';
+          }
         } else {
           device = 'desktop';
         }
+
+        isIOS = /iPad|iPhone|iPod/.test(req.headers['user-agent'])
+
         req.headers['x-ua-device'] = device;
         res.setHeader('X-UA-Device', device);
+        if (detailedDevice) {
+          req.headers['x-ua-device-detailed'] = detailedDevice;
+          res.setHeader('X-UA-Device-Detailed', detailedDevice);
+        }
         updateVary(res);
 
         return next();
